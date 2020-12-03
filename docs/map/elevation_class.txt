@@ -1,0 +1,10 @@
+# Cagetory from Avalanche Rose by UAC
+|           | < 8000 ft | 8K to 9.5K | > 9500 ft
+| Elevation |     0            1           2
+
+# Raster math
+# 'SaltLake_30L' was the name of the downloaded raster layer
+
+("SaltLake_30@1" < 2438) * 0  +
+("SaltLake_30@1" >= 2438 AND "SaltLake_30@1" < 2896 ) * 1 +
+("SaltLake_30@1" >= 2896) * 2 

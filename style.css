@@ -1,0 +1,196 @@
+#map-area {
+    height: 500px;
+    width: 100%;
+}
+
+#warn-uac {
+    font-size: 1.2em;
+}
+
+#navigation-panel, #info-panel {
+    background-color: #f0f0f0;
+}
+
+#rose-view {
+    position: absolute;
+    height: 100%;
+    max-height: 400px;
+    width: 100%;
+}
+
+#rose-menu {
+    position: absolute;
+    top: 400px;
+    width: 100%;
+}
+
+#rose-diagram g {
+    transform: translate(50%, 50%);
+}
+
+#rose-diagram path {
+    stroke: #000000;
+    stroke-width: 2px;
+    stroke-opacity: 50%;
+    cursor: pointer;
+}
+#rose-diagram .petal.hover {
+    stroke-width: 4px;
+    stroke-opacity: 100%;
+}
+
+#rose-diagram .petal.opaque {
+    opacity: 25%;
+}
+
+#rose-diagram .petal-label {
+    text-anchor: middle;
+    letter-spacing: .1rem;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+span#petal-info,
+span#map-info {
+    position: absolute;
+    left: 0;
+    display: block;
+    text-align: center;
+    padding: .1em 0.6em;
+    border: 2px solid gray;
+    background-color: white;
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+span#petal-info {
+    top: 0;
+}
+
+span#petal-info.hidden {
+    opacity: 0;
+}
+
+span#map-info {
+    bottom: 0;
+    margin-left: 15px;
+    padding: .3em 1em;
+    border: 3px solid darkslategray;
+    font-size: 1.1em;
+    text-align: left;
+    text-transform: capitalize;
+}
+
+span#map-info i {
+    font-weight: 600;
+    display: block;
+}
+
+span#map-info > span {
+    display: block;
+    float: none;
+}
+
+#dropdown-view {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+}
+
+#calendar-view {
+    width: 100%;
+    min-width: 270px;
+    height: 270px;
+    padding-left: .5em;
+}
+
+#calendar-view g {
+    position: absolute;
+}
+
+#calendar-view .calendar-day-box {
+    stroke-width: 2px;
+    stroke: darkslategray;
+    fill-opacity: 0.4;
+    cursor: pointer;
+}
+
+#calendar-view .calendar-day-box.selected {
+    stroke-width: 3px;
+    stroke: darkviolet;
+}
+
+#calendar-view .calendar-day-box.empty {
+    stroke-width: 0;
+    fill-opacity: 0;
+    pointer-events: none;
+}
+
+#calendar-view .calendar-day-text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-size: 1.2em;
+    letter-spacing: .05em;
+    pointer-events: none;
+}
+
+.bg-uac-moderate-low {
+    fill: url(#uac-moderate-low);
+}
+
+.bg-uac-considerate-low {
+    fill: url(#uac-considerate-low);
+}
+
+.bg-uac-considerate-moderate {
+    fill: url(#uac-considerate-moderate);
+}
+
+.bg-uac-high-low {
+    fill: url(#uac-high-low);
+}
+
+.bg-uac-high-moderate {
+    fill: url(#uac-high-moderate);
+}
+
+.bg-uac-high-considerate {
+    fill: url(#uac-high-considerate);
+}
+
+.uac-low,
+.bg-uac-low-low {
+    fill: #00c346;
+    stop-color: #00c346;
+    background-color: #00c346;
+}
+
+.uac-moderate,
+.bg-uac-moderate-moderate {
+    fill: #fcfc00;
+    stop-color: #fcfc00;
+    background-color: #fcfc00;
+}
+
+.uac-considerate,
+.bg-uac-considerate-considerate {
+    fill: #ff9100;
+    stop-color: #ff9100;
+    background-color: #ff9100;
+}
+
+.uac-high,
+.bg-uac-high-high {
+    fill: #cc332c;
+    stop-color: #cc332c;
+    background-color: #cc332c;
+}
+
+.uac-extreme {
+    stop-color: #222222;
+    background-color: #222222;
+}
+
+#info-view {
+    font-size: 1.2em;
+}
