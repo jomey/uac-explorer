@@ -41,7 +41,7 @@ class Calendar {
             .join('g')
             .attr('transform', (_d, i) => {
                 const x = i % 7 * Calendar.CELL_SIZE + 3;
-                const y = parseInt(i/7) * Calendar.CELL_SIZE + 3;
+                const y = Math.floor(i/7) * Calendar.CELL_SIZE + 3;
                 return `translate(${x},${y})`
             });
 
