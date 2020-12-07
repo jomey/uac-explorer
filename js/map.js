@@ -149,21 +149,17 @@ class AreaMap {
     }
 
     infoAtLatLng(lat, lng) {
-        try {
-            const x = this.lngToRasterX(lng);
-            const y = this.latToRasterY(lat);
-            const uacID = this.uacClassInfo[y][x];
-            const info = UACMapper.CLASSES[uacID];
-            this.selectionSync.rose.selectPetal(uacID);
-            this.selectionSync.setMarkerInfo(
-                `${info.Elevation}</br>` +
-                `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +
-                `Aspect: ${info.Aspect}</br>` +
-                `Slope Angle: ${this.slopeInfo[y][x]}`
-            );
-        } catch (err) {
-            console.error('No value');
-        }
+        const x = this.lngToRasterX(lng);
+        const y = this.latToRasterY(lat);
+        const uacID = this.uacClassInfo[y][x];
+        const info = UACMapper.CLASSES[uacID];
+        this.selectionSync.rose.selectPetal(uacID);
+        this.selectionSync.setMarkerInfo(
+            `${info.Elevation}</br>` +
+            `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +
+            `Aspect: ${info.Aspect}</br>` +
+            `Slope Angle: ${this.slopeInfo[y][x]}`
+        );
     }
 
     showForecast(forecast) {
