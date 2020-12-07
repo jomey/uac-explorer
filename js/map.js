@@ -26,7 +26,7 @@ class AreaMap {
 
     removeMarker() {
         if (this._currentMarker) this.currentMarker.remove();
-        this.markerInfo.text('');
+        this.selectionSync.setMarkerInfo();
     }
 
     moveMarker(e) {
@@ -60,10 +60,11 @@ class AreaMap {
         ).addTo(this.baseLayer);
     }
 
-    constructor() {
+    constructor(selectionSync) {
+        this.selectionSync = selectionSync;
+        this.selectionSync.map = this;
+
         this.addBaseLayer();
-        this.dateInfo = d3.select(`span#date-info`);
-        this.markerInfo = d3.select('span#marker-info')
 
         return fetch(MapData.uacClasses)
             .then(response => response.arrayBuffer())
@@ -150,8 +151,7 @@ class AreaMap {
             const y = this.latToRasterY(lat);
             const uacID = this.uacClassInfo[y][x];
             const info = UACMapper.CLASSES[uacID];
-            this.markerInfo.html(
-                '<i>Marker</i>' +
+            this.selectionSync.setMarkerInfo(
                 `${info.Elevation}</br>` +
                 `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +
                 `Aspect: ${info.Aspect}</br>` +
@@ -162,10 +162,9 @@ class AreaMap {
         }
     }
 
-    showForecast(forecast, date) {
+    showForecast(forecast) {
         this.selection = undefined;
         this.removeMarker();
-        this.dateInfo.text(date.toLocaleDateString());
         this.forecast = forecast;
         this.redraw();
     }
