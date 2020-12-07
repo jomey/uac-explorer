@@ -49,7 +49,7 @@ class RoseMenu {
             ).map(a => a.ID);
         }
         this.rose.selectionSync.map.selection = selection;
-        this.rose.clearHighlightPetal(true);
+        this.rose.clearHighlightPetal();
         if (selection) {
             this.rose.svg.selectAll('.petal')
                 .filter((d) => {

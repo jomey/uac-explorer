@@ -20,26 +20,31 @@ class Rose {
         that.selectionSync.map.selection = [id];
         this.svg.selectAll('.petal')
             .filter((d) => d.data === id)
-            .each(function(d) { that.highlightPetal(this, d, true) });
+            .each(function(d) { that.highlightPetal(this, d) });
     }
 
-    highlightPetal(petal, d, force = false) {
-        if (this.selectionSync.map.selection === undefined || force) {
-            this.clearHighlightPetal(force);
+    highlightPetal(petal, d, hover = false) {
+        if (hover) {
             d3.select(petal).classed('hover', true).raise();
-            d3.selectAll('.petal:not(.hover)').classed('opaque', true);
+        } else {
+            this.clearHighlightPetal();
+            d3.select(petal).classed('hover', true).raise();
+            this.svg.selectAll('.petal:not(.hover)').classed('opaque', true);
             this.selectionSync.setRoseInfo(d);
-        } else if (petal) {
-            d3.select(petal).classed('hover', true).raise();
         }
     }
 
-    clearHighlightPetal(force = false) {
-        if (this.selectionSync.map.selection === undefined || force) {
+    clearHighlightPetal(petal = undefined) {
+        if (petal) {
+            const selection = this.svg.selectAll('.opaque');
+            if (selection.size() === 0) {
+                d3.select(petal).classed('hover', false)
+            } else {
+                selection.classed('hover', false);
+            }
+        } else {
             this.svg.selectAll('.petal').attr('class', 'petal');
             this.selectionSync.setRoseInfo();
-        } else {
-            d3.select('.hover.opaque').classed('hover', false);
         }
     }
 
@@ -55,14 +60,14 @@ class Rose {
             .attr("d", this.levelArcs(level))
             .on('mouseover', function (_e, d) {
                 that.svgHelperText.text('');
-                that.highlightPetal(this, d);
+                that.highlightPetal(this, d, true);
             })
-            .on('mouseout', () => this.clearHighlightPetal())
+            .on('mouseout', function() { that.clearHighlightPetal(this) })
             .on('click', (e, d) => {
                 e.stopPropagation();
                 this.selectionSync.map.selection = [d.data];
                 this.menu.clear();
-                this.highlightPetal(e.currentTarget, d, true);
+                this.highlightPetal(e.currentTarget, d);
             });
     }
 
@@ -87,7 +92,7 @@ class Rose {
                 this.selectionSync.map.selection = undefined;
                 this.selectionSync.map.removeMarker();
                 this.menu.clear();
-                this.clearHighlightPetal(true);
+                this.clearHighlightPetal();
             });
 
         this.svgHelperText = this.svg.append('svg:title')
@@ -113,7 +118,7 @@ class Rose {
     }
 
     showForecast(forecast) {
-        this.clearHighlightPetal(true);
+        this.clearHighlightPetal();
         this.menu.clear();
         this.svg
             .selectAll('.petal')
