@@ -14,6 +14,15 @@ class Rose {
             .endAngle(d => { return d.endAngle - Rose.PETAL_OFFSET });
     }
 
+    selectPetal(id) {
+        const that = this;
+        this.menu.clear();
+        that.selectionSync.map.selection = [id];
+        this.svg.selectAll('.petal')
+            .filter((d) => d.data === id)
+            .each(function(d) { that.highlightPetal(this, d, true) });
+    }
+
     highlightPetal(petal, d, force = false) {
         if (this.selectionSync.map.selection === undefined || force) {
             this.clearHighlightPetal(force);
@@ -66,7 +75,7 @@ class Rose {
             .attr("height", "100%")
             .on('mouseover', (e) => {
                 if (e.target === this.svg.node()) {
-                    if (this.selectionSync.map.selection !== undefined) {
+                    if (this.selectionSync.map.hasSelection) {
                         this.svgHelperText.text('CLick to clear selection');
                     } else {
                         this.svgHelperText.text('');
@@ -75,7 +84,6 @@ class Rose {
             })
             .on('click',  (e) => {
                 e.stopPropagation();
-                if (this.selectionSync.map.selection === undefined) return;
                 this.selectionSync.map.selection = undefined;
                 this.selectionSync.map.removeMarker();
                 this.menu.clear();

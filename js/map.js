@@ -24,6 +24,9 @@ class AreaMap {
         this.redraw();
     }
 
+    get hasSelection() {
+        return this.selection !== undefined || this.currentMarker !== undefined;
+    }
     removeMarker() {
         if (this._currentMarker) this.currentMarker.remove();
         this.selectionSync.setMarkerInfo();
@@ -151,6 +154,7 @@ class AreaMap {
             const y = this.latToRasterY(lat);
             const uacID = this.uacClassInfo[y][x];
             const info = UACMapper.CLASSES[uacID];
+            this.selectionSync.rose.selectPetal(uacID);
             this.selectionSync.setMarkerInfo(
                 `${info.Elevation}</br>` +
                 `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +

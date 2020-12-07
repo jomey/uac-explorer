@@ -21,6 +21,7 @@ class SelectionSync {
         let text = '';
         if (typeof(value) === 'string') {
             text = '<i>Marker Info</i>' + value;
+            this.setRoseInfo();
         }
         this.markerSpan.html(text);
     }
