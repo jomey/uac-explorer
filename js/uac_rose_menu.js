@@ -14,7 +14,7 @@ class RoseMenu {
             .attr("value", d => d);
 
         this.aspects
-            .on('change', function (e) {
+            .on('change', function () {
                 that.elevations.node().selectedIndex = 0;
                 that.updateMap(this, UACMapper.ASPECTS);
             });
