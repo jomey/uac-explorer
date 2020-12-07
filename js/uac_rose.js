@@ -63,11 +63,15 @@ class Rose {
                 that.highlightPetal(this, d, true);
             })
             .on('mouseout', function() { that.clearHighlightPetal(this) })
-            .on('click', (e, d) => {
+            .on('click', function(e, d) {
                 e.stopPropagation();
-                this.selectionSync.map.selection = [d.data];
-                this.menu.clear();
-                this.highlightPetal(e.currentTarget, d);
+                if (that.svg.selectAll('.opaque').size() > 0 &&
+                    !this.classList.contains('opaque')) {
+                    return;
+                }
+                that.selectionSync.map.selection = [d.data];
+                that.menu.clear();
+                that.highlightPetal(e.currentTarget, d);
             });
     }
 
