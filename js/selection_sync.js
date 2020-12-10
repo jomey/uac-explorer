@@ -17,19 +17,19 @@ class SelectionSync {
         this.info.showTextInfo(date);
     }
 
-    markerInfoText(markerInfo) {
-        const info = UACMapper.CLASSES[markerInfo.uacID];
+    markerInfoText() {
+        const info = UACMapper.CLASSES[this.map.currentMarker.uacInfo.uacID];
         return `${info.Elevation}</br>` +
-            `Forecast: ${AvalancheDangerColor.LEVELS[markerInfo.forecast]}</br>` +
+            `Forecast: ${AvalancheDangerColor.LEVELS[this.map.currentMarker.uacInfo.forecast]}</br>` +
             `Aspect: ${info.Aspect}</br>` +
-            `Slope Angle: ${markerInfo.slopeInfo}`
+            `Slope Angle: ${this.map.currentMarker.uacInfo.slopeInfo}`
     }
 
-    setMarkerInfo(markerInfo) {
+    setMarkerInfo() {
         let text = '';
-        if (typeof(markerInfo) === 'object') {
-            text = '<i>Marker Info</i>' + this.markerInfoText(markerInfo);
-            this.rose.selectPetal(markerInfo.uacID);
+        if (this.map.currentMarker) {
+            text = '<i>Marker Info</i>' + this.markerInfoText();
+            this.rose.selectPetal(this.map.currentMarker.uacInfo.uacID);
             this.setRoseInfo();
         }
         this.markerSpan.html(text);

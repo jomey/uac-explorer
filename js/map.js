@@ -159,12 +159,12 @@ class AreaMap {
         const x = this.lngToRasterX(marker.latlng.lng);
         const y = this.latToRasterY(marker.latlng.lat);
         const uacID = this.uacClassInfo[y][x];
-        this.selectionSync.setMarkerInfo({
-                uacID: uacID,
-                forecast: this.forecast[uacID],
-                slopeInfo: this.slopeInfo[y][x],
-            }
-        );
+        this.currentMarker.uacInfo = {
+            uacID: uacID,
+            forecast: this.forecast[uacID],
+            slopeInfo: this.slopeInfo[y][x],
+        };
+        this.selectionSync.setMarkerInfo();
     }
 
     showForecast(forecast) {
