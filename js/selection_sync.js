@@ -53,7 +53,12 @@ class SelectionSync {
         if (value) {
             text += '<i>Rose Filter</i>';
             if (typeof(value) === 'object') {
-                text += this.roseInfoText(value);
+                if (this.map.currentMarker &&
+                    this.map.currentMarker.uacInfo.uacID !== value.data) {
+                    text += this.roseInfoText(value);
+                } else {
+                    text = '';
+                }
             } else if (typeof(value) === 'string') {
                 text += value;
             }
