@@ -41,6 +41,13 @@ class SelectionSync {
             `Forecast: ${AvalancheDangerColor.LEVELS[node.forecast]}`
     }
 
+    /**
+     * Set information about the rose selection or rose menu selection
+     *
+     * @param value
+     *      Object - Rose selection
+     *      String - Rose menu selection
+     */
     setRoseInfo(value = null) {
         let text = '';
         if (value) {
