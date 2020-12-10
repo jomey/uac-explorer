@@ -154,13 +154,11 @@ class AreaMap {
         const x = this.lngToRasterX(marker.latlng.lng);
         const y = this.latToRasterY(marker.latlng.lat);
         const uacID = this.uacClassInfo[y][x];
-        const info = UACMapper.CLASSES[uacID];
-        this.selectionSync.rose.selectPetal(uacID);
-        this.selectionSync.setMarkerInfo(
-            `${info.Elevation}</br>` +
-            `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +
-            `Aspect: ${info.Aspect}</br>` +
-            `Slope Angle: ${this.slopeInfo[y][x]}`
+        this.selectionSync.setMarkerInfo({
+                uacID: uacID,
+                forecast: this.forecast[uacID],
+                slopeInfo: this.slopeInfo[y][x],
+            }
         );
     }
 

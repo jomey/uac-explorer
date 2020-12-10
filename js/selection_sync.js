@@ -17,10 +17,19 @@ class SelectionSync {
         this.info.showTextInfo(date);
     }
 
-    setMarkerInfo(value = null) {
+    markerInfoText(markerInfo) {
+        const info = UACMapper.CLASSES[markerInfo.uacID];
+        return `${info.Elevation}</br>` +
+            `Forecast: ${AvalancheDangerColor.LEVELS[markerInfo.forecast]}</br>` +
+            `Aspect: ${info.Aspect}</br>` +
+            `Slope Angle: ${markerInfo.slopeInfo}`
+    }
+
+    setMarkerInfo(markerInfo) {
         let text = '';
-        if (typeof(value) === 'string') {
-            text = '<i>Marker Info</i>' + value;
+        if (typeof(markerInfo) === 'object') {
+            text = '<i>Marker Info</i>' + this.markerInfoText(markerInfo);
+            this.rose.selectPetal(markerInfo.uacID);
             this.setRoseInfo();
         }
         this.markerSpan.html(text);
