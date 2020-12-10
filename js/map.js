@@ -13,7 +13,20 @@ class MapData {
 
 class AreaMap {
     get currentMarker() { return this._currentMarker; }
-    set currentMarker(marker) { this._currentMarker = marker; }
+    set currentMarker(marker) {
+        if (marker === null) {
+            if (this._currentMarker) {
+                if (this._currentMarker) this._currentMarker.remove();
+                this._currentMarker = marker;
+            }
+            this.selectionSync.setMarkerInfo();
+        } else {
+            if (this._currentMarker) this._currentMarker.remove();
+            this._currentMarker = L.marker(marker.latlng);
+            this._currentMarker.addTo(this.baseLayer);
+            this.infoAtLatLng(marker)
+        }
+    }
 
     get forecast() { return this._forecast;}
     set forecast(values) { this._forecast = values; }
@@ -26,17 +39,6 @@ class AreaMap {
 
     get hasSelection() {
         return this.selection !== undefined || this.currentMarker !== undefined;
-    }
-    removeMarker() {
-        if (this._currentMarker) this.currentMarker.remove();
-        this.selectionSync.setMarkerInfo();
-    }
-
-    moveMarker(e) {
-        this.removeMarker();
-        this.currentMarker = L.marker(e.latlng);
-        this.currentMarker.addTo(this.baseLayer);
-        this.infoAtLatLng(e.latlng.lat, e.latlng.lng)
     }
 
     get uacClassInfo() {
@@ -51,7 +53,7 @@ class AreaMap {
         this.baseLayer = L.map("map-area").setView(
             MapData.centerCoords, MapData.zoomLevel
         ).on('click', () => {
-            this.removeMarker();
+            this.currentMarker = null;
         });
 
         L.tileLayer('https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
@@ -121,7 +123,7 @@ class AreaMap {
                 opacity: 0,
             }
         ).on('click', function (e) {
-            that.moveMarker(e);
+            that.currentMarker = e;
             L.DomEvent.stopPropagation(e);
         });
 
@@ -148,9 +150,9 @@ class AreaMap {
         )
     }
 
-    infoAtLatLng(lat, lng) {
-        const x = this.lngToRasterX(lng);
-        const y = this.latToRasterY(lat);
+    infoAtLatLng(marker) {
+        const x = this.lngToRasterX(marker.latlng.lng);
+        const y = this.latToRasterY(marker.latlng.lat);
         const uacID = this.uacClassInfo[y][x];
         const info = UACMapper.CLASSES[uacID];
         this.selectionSync.rose.selectPetal(uacID);
@@ -164,7 +166,7 @@ class AreaMap {
 
     showForecast(forecast) {
         this.selection = undefined;
-        this.removeMarker();
+        this.currentMarker = null;
         this.forecast = forecast;
         this.redraw();
     }

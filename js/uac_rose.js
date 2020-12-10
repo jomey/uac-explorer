@@ -94,7 +94,7 @@ class Rose {
             .on('click',  (e) => {
                 e.stopPropagation();
                 this.selectionSync.map.selection = undefined;
-                this.selectionSync.map.removeMarker();
+                this.selectionSync.map.currentMarker = null;
                 this.menu.clear();
                 this.clearHighlightPetal();
             });
