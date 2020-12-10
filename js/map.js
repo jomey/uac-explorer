@@ -49,6 +49,11 @@ class AreaMap {
         return this.raster.values[1];
     }
 
+    reset() {
+        this.selection = undefined;
+        this.currentMarker = null;
+    }
+
     addBaseLayer() {
         this.baseLayer = L.map("map-area").setView(
             MapData.centerCoords, MapData.zoomLevel
@@ -163,8 +168,7 @@ class AreaMap {
     }
 
     showForecast(forecast) {
-        this.selection = undefined;
-        this.currentMarker = null;
+        this.reset();
         this.forecast = forecast;
         this.redraw();
     }
