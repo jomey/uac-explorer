@@ -38,7 +38,7 @@ class Rose {
         if (petal) {
             const selection = this.svg.selectAll('.opaque');
             if (selection.size() === 0) {
-                d3.select(petal).classed('hover', false)
+                d3.select(petal).classed('hover', false);
             } else {
                 selection.classed('hover', false);
             }
@@ -102,9 +102,9 @@ class Rose {
             .classed('clear-selection', true);
 
         // From inside out
-        this.addElevationLevel(UACMapper.HIGH_ELEVATION_IDS.all, 1)
-        this.addElevationLevel(UACMapper.MID_ELEVATION_IDS.all, 2)
-        this.addElevationLevel(UACMapper.LOW_ELEVATION_IDS.all, 3)
+        this.addElevationLevel(UACMapper.HIGH_ELEVATION_IDS.all, 1);
+        this.addElevationLevel(UACMapper.MID_ELEVATION_IDS.all, 2);
+        this.addElevationLevel(UACMapper.LOW_ELEVATION_IDS.all, 3);
 
         const textPositions = this.levelArcs(4);
         this.svg.append("g").selectAll("path")

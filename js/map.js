@@ -3,8 +3,8 @@ class MapData {
         return 'data/LCC_uac_30m_4326.tif'
     }
 
-    static get zoomLevel() { return 12; }
-    static get centerCoords() { return [40.60, -111.67]; }
+    static get zoomLevel() { return 12 }
+    static get centerCoords() { return [40.60, -111.67] }
 
     static get attribution() {
         return '&copy; <a href="https://www.openstreetmap.org/copyright">OpenTopoMap</a> (CC-BY-SA)';
@@ -24,11 +24,11 @@ class AreaMap {
             if (this._currentMarker) this._currentMarker.remove();
             this._currentMarker = L.marker(marker.latlng);
             this._currentMarker.addTo(this.baseLayer);
-            this.infoAtLatLng(marker)
+            this.infoAtLatLng(marker);
         }
     }
 
-    get forecast() { return this._forecast;}
+    get forecast() { return this._forecast; }
     set forecast(values) { this._forecast = values; }
 
     get selection() { return this._selection; }
@@ -82,7 +82,7 @@ class AreaMap {
             .then((goeRaster) => {
                 this.addLayer(goeRaster);
                 return this;
-            });
+            })
     }
 
     classToColor(value) {
@@ -144,7 +144,7 @@ class AreaMap {
             this.raster.width *
             Math.abs(lng - this.raster.xmin) /
             (this.raster.xmax - this.raster.xmin)
-        );
+        )
     }
 
     latToRasterY(lat) {
