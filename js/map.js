@@ -3,8 +3,8 @@ class MapData {
         return 'data/LCC_uac_30m_4326.tif'
     }
 
-    static get zoomLevel() { return 12; }
-    static get centerCoords() { return [40.60, -111.67]; }
+    static get zoomLevel() { return 12 }
+    static get centerCoords() { return [40.60, -111.67] }
 
     static get attribution() {
         return '&copy; <a href="https://www.openstreetmap.org/copyright">OpenTopoMap</a> (CC-BY-SA)';
@@ -13,9 +13,22 @@ class MapData {
 
 class AreaMap {
     get currentMarker() { return this._currentMarker; }
-    set currentMarker(marker) { this._currentMarker = marker; }
+    set currentMarker(marker) {
+        if (marker === null) {
+            if (this._currentMarker) {
+                if (this._currentMarker) this._currentMarker.remove();
+                this._currentMarker = marker;
+            }
+            this.selectionSync.setMarkerInfo();
+        } else {
+            if (this._currentMarker) this._currentMarker.remove();
+            this._currentMarker = L.marker(marker.latlng);
+            this._currentMarker.addTo(this.baseLayer);
+            this.infoAtLatLng(marker);
+        }
+    }
 
-    get forecast() { return this._forecast;}
+    get forecast() { return this._forecast; }
     set forecast(values) { this._forecast = values; }
 
     get selection() { return this._selection; }
@@ -24,16 +37,8 @@ class AreaMap {
         this.redraw();
     }
 
-    removeMarker() {
-        if (this._currentMarker) this.currentMarker.remove();
-        this.markerInfo.text('');
-    }
-
-    moveMarker(e) {
-        this.removeMarker();
-        this.currentMarker = L.marker(e.latlng);
-        this.currentMarker.addTo(this.baseLayer);
-        this.infoAtLatLng(e.latlng.lat, e.latlng.lng)
+    get hasSelection() {
+        return this.selection !== undefined || this.currentMarker !== undefined;
     }
 
     get uacClassInfo() {
@@ -44,11 +49,16 @@ class AreaMap {
         return this.raster.values[1];
     }
 
+    reset() {
+        this.selection = undefined;
+        this.currentMarker = null;
+    }
+
     addBaseLayer() {
         this.baseLayer = L.map("map-area").setView(
             MapData.centerCoords, MapData.zoomLevel
         ).on('click', () => {
-            this.removeMarker();
+            this.currentMarker = null;
         });
 
         L.tileLayer('https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
@@ -60,10 +70,11 @@ class AreaMap {
         ).addTo(this.baseLayer);
     }
 
-    constructor() {
+    constructor(selectionSync) {
+        this.selectionSync = selectionSync;
+        this.selectionSync.map = this;
+
         this.addBaseLayer();
-        this.dateInfo = d3.select(`span#date-info`);
-        this.markerInfo = d3.select('span#marker-info')
 
         return fetch(MapData.uacClasses)
             .then(response => response.arrayBuffer())
@@ -71,7 +82,7 @@ class AreaMap {
             .then((goeRaster) => {
                 this.addLayer(goeRaster);
                 return this;
-            });
+            })
     }
 
     classToColor(value) {
@@ -117,7 +128,7 @@ class AreaMap {
                 opacity: 0,
             }
         ).on('click', function (e) {
-            that.moveMarker(e);
+            that.currentMarker = e;
             L.DomEvent.stopPropagation(e);
         });
 
@@ -133,7 +144,7 @@ class AreaMap {
             this.raster.width *
             Math.abs(lng - this.raster.xmin) /
             (this.raster.xmax - this.raster.xmin)
-        );
+        )
     }
 
     latToRasterY(lat) {
@@ -144,28 +155,20 @@ class AreaMap {
         )
     }
 
-    infoAtLatLng(lat, lng) {
-        try {
-            const x = this.lngToRasterX(lng);
-            const y = this.latToRasterY(lat);
-            const uacID = this.uacClassInfo[y][x];
-            const info = UACMapper.CLASSES[uacID];
-            this.markerInfo.html(
-                '<i>Marker</i>' +
-                `${info.Elevation}</br>` +
-                `Forecast: ${AvalancheDangerColor.LEVELS[this.forecast[uacID]]}</br>` +
-                `Aspect: ${info.Aspect}</br>` +
-                `Slope Angle: ${this.slopeInfo[y][x]}`
-            );
-        } catch (err) {
-            console.error('No value');
-        }
+    infoAtLatLng(marker) {
+        const x = this.lngToRasterX(marker.latlng.lng);
+        const y = this.latToRasterY(marker.latlng.lat);
+        const uacID = this.uacClassInfo[y][x];
+        this.currentMarker.uacInfo = {
+            uacID: uacID,
+            forecast: this.forecast[uacID],
+            slopeInfo: this.slopeInfo[y][x],
+        };
+        this.selectionSync.setMarkerInfo();
     }
 
-    showForecast(forecast, date) {
-        this.selection = undefined;
-        this.removeMarker();
-        this.dateInfo.text(date.toLocaleDateString());
+    showForecast(forecast) {
+        this.reset();
         this.forecast = forecast;
         this.redraw();
     }

@@ -14,7 +14,7 @@ class RoseMenu {
             .attr("value", d => d);
 
         this.aspects
-            .on('change', function (e) {
+            .on('change', function () {
                 that.elevations.node().selectedIndex = 0;
                 that.updateMap(this, UACMapper.ASPECTS);
             });
@@ -48,19 +48,19 @@ class RoseMenu {
                 menu.options[selection].value
             ).map(a => a.ID);
         }
-        this.rose.map.selection = selection;
-        this.rose.clearHighlightPetal(true);
+        this.rose.selectionSync.map.selection = selection;
+        this.rose.clearHighlightPetal();
         if (selection) {
             this.rose.svg.selectAll('.petal')
                 .filter((d) => {
-                    return this.rose.map.selection.includes(d.data);
+                    return this.rose.selectionSync.map.selection.includes(d.data);
                 })
                 .classed('hover', true)
                 .raise();
             d3.selectAll('.petal:not(.hover)').classed('opaque', true);
-            this.rose.roseInfo.html(`<i>Rose Filter</i>${menu.value}`);
+            this.rose.selectionSync.setRoseInfo(menu.value);
         } else {
-            this.rose.roseInfo.html('');
+            this.rose.selectionSync.setRoseInfo();
         }
     }
 }

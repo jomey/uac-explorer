@@ -1,8 +1,6 @@
 class Calendar {
-    constructor(rose, map) {
-        this.rose = rose;
-        this.map = map;
-        this.info = new UACInfo();
+    constructor(selectionSync) {
+        this.selectionSync = selectionSync;
     }
 
     show() {
@@ -43,7 +41,7 @@ class Calendar {
             .join('g')
             .attr('transform', (_d, i) => {
                 const x = i % 7 * Calendar.CELL_SIZE + 3;
-                const y = parseInt(i/7) * Calendar.CELL_SIZE + 3;
+                const y = Math.floor(i/7) * Calendar.CELL_SIZE + 3;
                 return `translate(${x},${y})`
             });
 
@@ -74,9 +72,9 @@ class Calendar {
 
     selectDate(date) {
         const forecast = this.data.get(date.toJSON()).values;
-        this.map.showForecast(forecast, date);
-        this.rose.showForecast(forecast);
-        this.info.showTextInfo(date);
+        this.selectionSync.setDateInfo(date);
+        this.selectionSync.map.showForecast(forecast);
+        this.selectionSync.rose.showForecast(forecast);
     }
 }
 

@@ -1,8 +1,6 @@
-new AreaMap().then(function(map) {
-    const avalancheRose = new Rose(map);
-    avalancheRose.draw();
+window.selectionSync = new SelectionSync();
 
-    window.currentCalendar = new Calendar(avalancheRose, map);
-    window.currentCalendar.show();
-    
+new AreaMap(selectionSync).then(function() {
+    new Rose(selectionSync).draw();
+    new Calendar(selectionSync).show();
 });
