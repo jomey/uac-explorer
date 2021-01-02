@@ -1,4 +1,7 @@
 class SelectionSync {
+    get calendar() { return this._calendar }
+    set calendar(value) { this._calendar = value; }
+
     get map() { return this._map }
     set map(value) { this._map = value; }
 
@@ -31,6 +34,9 @@ class SelectionSync {
             text = '<i>Marker Info</i>' + this.markerInfoText();
             this.rose.selectPetal(this.map.currentMarker.uacInfo.uacID);
             this.setRoseInfo();
+            this.calendar.daysUacIdBG(this.map.currentMarker.uacInfo.uacID);
+        } else if (this.calendar.days) {
+            this.calendar.daysUacIdBG(null);
         }
         this.markerSpan.html(text);
     }
@@ -62,6 +68,9 @@ class SelectionSync {
             } else if (typeof(value) === 'string') {
                 text += value;
             }
+            this.calendar.daysUacIdBG(value.data);
+        } else if (this.calendar.days) {
+            this.calendar.daysUacIdBG(null);
         }
         this.roseSpan.html(text);
     }
